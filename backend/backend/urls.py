@@ -21,7 +21,7 @@ from rest_framework.routers import DefaultRouter
 from userapp.views import UserViewSet
 
 router = DefaultRouter()
-router.register('userapp', UserViewSet)
+router.register('users', UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
