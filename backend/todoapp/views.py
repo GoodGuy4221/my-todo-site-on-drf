@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.renderers import JSONRenderer, AdminRenderer
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Project, Todo
@@ -14,5 +15,6 @@ class ProjectViewSet(ModelViewSet):
 
 
 class TodoViewSet(ModelViewSet):
+    # renderer_classes = (JSONRenderer,)
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer

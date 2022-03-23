@@ -135,20 +135,21 @@ AUTH_USER_MODEL = 'userapp.User'
 
 # REST_FRAMEWORK
 REST_FRAMEWORK = {
-
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
         'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
         # Any other renders
+        # 'rest_framework.renderers.JSONRenderer',
+        # 'rest_framework.renderers.BrowsableAPIRenderer',
     ),
 
-    'DEFAULT_PARSER_CLASSES': (
-        # If you use MultiPartFormParser or FormParser, we also have a camel case version
-        'djangorestframework_camel_case.parser.CamelCaseFormParser',
-        'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
-        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-        # Any other parsers
-    ),
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     # If you use MultiPartFormParser or FormParser, we also have a camel case version
+    #     'djangorestframework_camel_case.parser.CamelCaseFormParser',
+    #     'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
+    #     'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    #     # Any other parsers
+    # ),
 
     'JSON_UNDERSCORE': {
         'no_underscore_before_number': True,
