@@ -4,6 +4,8 @@ from userapp.models import User
 
 
 class Command(BaseCommand):
+    help = 'Create Superuser and some test users'
+
     def handle(self, *args, **options):
         admin = User.objects.filter(username='admin')
         if not admin:
