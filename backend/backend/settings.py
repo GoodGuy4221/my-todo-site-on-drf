@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'django_filters',
 
     'userapp.apps.UserappConfig',
     'todoapp.apps.TodoappConfig',
@@ -130,7 +131,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Auth model
+# User model
 AUTH_USER_MODEL = 'userapp.User'
 
 # REST_FRAMEWORK
@@ -143,15 +144,19 @@ REST_FRAMEWORK = {
         # 'rest_framework.renderers.BrowsableAPIRenderer',
     ),
 
-    # 'DEFAULT_PARSER_CLASSES': (
-    #     # If you use MultiPartFormParser or FormParser, we also have a camel case version
-    #     'djangorestframework_camel_case.parser.CamelCaseFormParser',
-    #     'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
-    #     'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-    #     # Any other parsers
-    # ),
+    'DEFAULT_PARSER_CLASSES': (
+        # If you use MultiPartFormParser or FormParser, we also have a camel case version
+        'djangorestframework_camel_case.parser.CamelCaseFormParser',
+        'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        # Any other parsers
+    ),
 
     'JSON_UNDERSCORE': {
         'no_underscore_before_number': True,
     },
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }

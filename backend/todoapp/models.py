@@ -19,11 +19,13 @@ class Todo(models.Model):
     ACTIVE = 'A'
     INACTIVE = 'I'
     FORMING = 'V'
+    CLOSED = 'C'
 
     TODO_STATUS_CHOICES = (
         (ACTIVE, 'активна'),
         (INACTIVE, 'неактивна'),
         (FORMING, 'формируется'),
+        (CLOSED, 'закрыто'),
     )
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='проект в котором сделана заметка')
@@ -35,3 +37,8 @@ class Todo(models.Model):
 
     def __str__(self):
         return f'{self.project} {self.status}'
+
+    # def delete(self, using=None, keep_parents=False):
+    #     if not self.status == 'C':
+    #         self.status = 'C'
+    #         self.save()
