@@ -4,21 +4,21 @@ from .models import Project, Todo
 from userapp.serializers import UserSerializer
 
 
-class ProjectSerializer(HyperlinkedModelSerializer):
+class ProjectSerializer(ModelSerializer):
     users = UserSerializer(many=True)
 
     class Meta:
         model = Project
         fields = (
             'id',
-            'url',
+            # 'url',
             'name',
             'url',
             'users',
         )
 
 
-class TodoSerializer(HyperlinkedModelSerializer):
+class TodoSerializer(ModelSerializer):
     project = ProjectSerializer()
     user = UserSerializer()
 
@@ -26,7 +26,7 @@ class TodoSerializer(HyperlinkedModelSerializer):
         model = Todo
         fields = (
             'id',
-            'url',
+            # 'url',
             'project',
             'text',
             'created_at',
