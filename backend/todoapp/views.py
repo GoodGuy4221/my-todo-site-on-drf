@@ -20,6 +20,8 @@ class ProjectViewSet(ModelViewSet):
     # filterset_fields = ('name',)
     filterset_class = ProjectFilter
 
+    # renderer_classes = [JSONRenderer]
+
     # def get_queryset(self):
     #     partname = self.request.query_params.get('partname', '')
     #     if partname:
