@@ -14,7 +14,6 @@ import DetailsProject from "./components/DetailsProject";
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
 const getUrl = (url) => `${DOMAIN}${url}`
-const getUrlParam = (url, param) => `${getUrl(url)}/:${param}`
 
 class App extends React.Component {
     constructor(props) {
@@ -23,7 +22,6 @@ class App extends React.Component {
             'users': [],
             'projects': [],
             'todos': [],
-            'project': {}
         }
     }
 
@@ -50,23 +48,15 @@ class App extends React.Component {
             }).catch(error => console.error(error))
     }
 
-    getProject(id) {
-        console.log('call')
-        axios.get(getUrl(`projects/1`))
-            .then(response => {
-                console.log(id)
-                return(response.data)
-                // console.log(this.state.project)
-            }).catch(error => console.error(`{error}`))
-    }
-
     render() {
+        const users = this.state.users
         const projects = this.state.projects
+        const todos = this.state.todos
+
         const pathMain = '/'
         const pathProjects = '/projects'
         const pathTodos = '/todos'
-
-        let pathDetailsProject = getUrlParam(pathProjects, 'id')
+        const pathTodosProject = '/todos/project/:id'
 
         return (
             <>
@@ -75,9 +65,10 @@ class App extends React.Component {
                     <Menu/>
 
                     <Switch>
-                        <Route exact path={pathMain} component={() => <UserList users={this.state.users}/>}/>
+                        <Route exact path={pathMain} component={() => <UserList users={users}/>}/>
                         <Route exact path={pathProjects} component={() => <ListProjects projects={projects}/>}/>
-                        <Route exact path={pathTodos} component={() => <ListTodo todos={this.state.todos}/>}/>
+                        <Route exact path={pathTodos} component={() => <ListTodo todos={todos}/>}/>
+                        <Route exact path={pathTodosProject} component={() => <ListTodo todos={todos}/>}/>
 
                         <Route path='/project/:id' component={
                             () => <DetailsProject projects={projects}/>
