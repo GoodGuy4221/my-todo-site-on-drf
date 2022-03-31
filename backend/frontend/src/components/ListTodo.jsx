@@ -15,17 +15,17 @@ const ItemTodo = ({todo}) => {
 
 const ListTodo = ({todos}) => {
     return(
+        <div className="container">
         <table className="table">
-            <tr>
                 <th>Номер</th>
                 <th>Текст</th>
                 <th>К проекту</th>
                 <th>Создатель</th>
                 <th>Дата создания</th>
                 <th>Дата обновления</th>
-                {todos.map(todo => <ItemTodo todo={todo}/>)}
-            </tr>
+                {todos.map((todo) => <ItemTodo todo={todo}/>)}
         </table>
+        </div>
     )
 }
 
