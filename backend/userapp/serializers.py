@@ -3,12 +3,12 @@ from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializ
 from .models import User
 
 
-class UserSerializer(ModelSerializer):
+class UserSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = (
             'id',
-            # 'url',
+            'url',
             'username',
             'first_name',
             'last_name',

@@ -33,7 +33,8 @@ class Todo(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата-время создания')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='дата-время обновления')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь создавший заметку')
-    status = models.CharField(verbose_name='статус заметки', max_length=1, choices=TODO_STATUS_CHOICES, default=ACTIVE)
+    is_active = models.BooleanField(default=True, verbose_name='статус')
+    status = models.CharField(verbose_name='расширенный статус', max_length=1, choices=TODO_STATUS_CHOICES, default=ACTIVE)
 
     def __str__(self):
         return f'{self.project} {self.status}'
