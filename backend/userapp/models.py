@@ -12,3 +12,4 @@ class User(AbstractUser):
     def delete(self, using=None, keep_parents=False):
         if self.is_active:
             self.is_active = False
+            self.save()
