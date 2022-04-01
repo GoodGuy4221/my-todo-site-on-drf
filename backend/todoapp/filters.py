@@ -17,17 +17,13 @@ class ProjectFilter(filters.FilterSet):
 
 
 class TodoFilter(filters.FilterSet):
-    project__name = filters.CharFilter(field_name='project', lookup_expr='iexact')
-    text = filters.CharFilter(lookup_expr='contains')
-    # created_at = filters.DateTimeFilter(lookup_expr='iexact')
+    # min_date = filters.DateTimeFilter(field_name="create", lookup_expr='gte', input_formats=['%Y-%m-%dT%H:%M'])
+    # max_date = filters.DateTimeFilter(field_name="create", lookup_expr='lte', input_formats=['%Y-%m-%dT%H:%M'])
     created_at = filters.DateFromToRangeFilter()
-    updated_at = filters.DateTimeFilter(lookup_expr='iexact')
-    user__name = filters.CharFilter(field_name='user', lookup_expr='iexact')
-    status__TODO_STATUS_CHOICES = filters.CharFilter(field_name='status', lookup_expr='iexact')
-
-    hours = filters.DateTimeFilter(
-        field_name='created_at', method='get_past_n_hours', label="Past n hours"
-    )
+    # updated_at = filters.DateTimeFilter(lookup_expr='iexact')
+    project__name = filters.CharFilter(field_name='project', lookup_expr='iexact')
+    user__name = filters.CharFilter(field_name='user')
+    is_active = filters.BooleanFilter()
 
     class Meta:
         model = Todo
@@ -35,7 +31,6 @@ class TodoFilter(filters.FilterSet):
             'project',
             'text',
             'created_at',
-            'updated_at',
             'user',
-            'status',
+            'is_active',
         )

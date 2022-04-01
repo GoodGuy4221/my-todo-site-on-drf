@@ -20,6 +20,8 @@ class ProjectViewSet(ModelViewSet):
     # filterset_fields = ('name',)
     filterset_class = ProjectFilter
 
+    # renderer_classes = [JSONRenderer]
+
     # def get_queryset(self):
     #     partname = self.request.query_params.get('partname', '')
     #     if partname:
@@ -35,11 +37,21 @@ class TodoViewSet(ModelViewSet):
     pagination_class = TodoPagination
     filterset_class = TodoFilter
 
+    # def destroy(self, request, *args, **kwargs):
+    #     if obj := self.get_object():
+    #         if not obj.status == 'C':
+    #             obj.status = 'C'
+    #             obj.save()
+    #         return Response(status=status.HTTP_204_NO_CONTENT)
+    #     else:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+
     def destroy(self, request, *args, **kwargs):
-        if obj := self.get_object():
-            if not obj.status == 'C':
-                obj.status = 'C'
-                obj.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
+        try:
+            instance = self.get_object()
+            if instance.is_active:
+                instance.is_active = False
+        except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(status=status.HTTP_204_NO_CONTENT)

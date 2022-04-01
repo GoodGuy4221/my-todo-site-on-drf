@@ -32,5 +32,5 @@ class TodoSerializer(HyperlinkedModelSerializer):
             'created_at',
             'updated_at',
             'user',
-            'status',
+            'is_active',
         )
