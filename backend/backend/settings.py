@@ -27,6 +27,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Application definition
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/blacklist_app.html
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
 
     'userapp.apps.UserappConfig',
     'todoapp.apps.TodoappConfig',
@@ -153,8 +156,19 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100,
+
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissions',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
 
 CORS_ALLOWED_ORIGINS = [
