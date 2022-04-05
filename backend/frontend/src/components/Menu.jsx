@@ -31,6 +31,12 @@ const Menu = () => {
                  <li><Link to='/'><img src={users} alt=""/>Пользователи</Link></li>
                  <li><Link to='/projects'><img src={project} alt=""/>Проекты</Link></li>
                  <li><Link to='/todos'><img src={todo} alt=""/>ToDo</Link></li>
+
+                 <li>
+                     {this.is_auth() ? <button onClick={() => this.logout()}>Logout</button> :
+                     <Link to='/auth'>Auth</Link>}
+                 </li>
+
              </ul>
         </nav>
     )
