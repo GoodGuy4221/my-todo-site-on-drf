@@ -5,6 +5,8 @@ import github from '../images/github.png'
 import details from '../images/details.png'
 import checklist from '../images/checklist.png'
 
+import NoAuth from "./NoAuth";
+
 const ItemProject = ({item}) => {
     let itemDetailsLink = `/project/${item.id}`
     let todosProject = `/todos/project/${item.id}`
@@ -20,6 +22,12 @@ const ItemProject = ({item}) => {
 }
 
 const ListProjects = ({projects}) => {
+    if (projects.length === 0){
+        return (
+            <NoAuth/>
+        )
+    }
+
     return(
         <div className="container">
         <table className="table">

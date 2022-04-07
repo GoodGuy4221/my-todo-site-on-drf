@@ -12,6 +12,8 @@ import ListTodo from "./components/ListTodo";
 import NotFound404 from "./components/NotFound404";
 import DetailsProject from "./components/DetailsProject";
 import AuthForm from "./components/Auth";
+import DetailsTodo from "./components/DetailsTodo";
+import DetailsUser from "./components/DetailsUser";
 
 import users_ from "./images/users.png";
 import project from "./images/project.png";
@@ -30,7 +32,8 @@ class App extends React.Component {
             'projects': [],
             'todos': [],
             'token': '',
-            'username': ''
+            'username': '',
+            'redirect_auth': false
         }
     }
 
@@ -110,6 +113,20 @@ class App extends React.Component {
         this.setState({'token': token}, () => this.load_data())
     }
 
+    get_username_from_cookies_and_set_state(){
+        const cookies = new Cookies()
+        const username = cookies.get('username')
+        if (username){
+            this.setState({'username': username})
+            return username
+        }
+        return null
+    }
+
+    get_username(){
+        return this.state.username || this.get_username_from_cookies_and_set_state() || 'Anonymous'
+    }
+
     componentDidMount() {
         this.get_token_from_cookies()
     }
@@ -123,14 +140,15 @@ class App extends React.Component {
         const pathProjects = '/projects'
         const pathTodos = '/todos'
         const pathTodosProject = '/todos/project/:id'
+        const pathTodoDetails = '/todos/:id'
+        const pathUserDetails = '/users/:id'
 
         return (
             <>
             <div className='container'>
                 <BrowserRouter>
                     <nav>
-                        <ul>
-                            <li>{this.state.username || 'User'}</li>
+                        <ul style={{'display': 'flex', 'justify-content': 'center'}}>
                             <li><Link to='/'><img src={users_} alt=""/>Пользователи</Link></li>
                             <li><Link to='/projects'><img src={project} alt=""/>Проекты</Link></li>
                             <li><Link to='/todos'><img src={todo} alt=""/>ToDo</Link></li>
@@ -139,16 +157,17 @@ class App extends React.Component {
                                 {this.is_auth() ? <Link onClick={() => this.logout()}><img src={logout_} alt="logout"/>Logout</Link> :
                                     <Link to='/auth'><img src={auth_icon} alt=""/>Auth</Link>}
                             </li>
-
+                            <li>{this.get_username()}</li>
                         </ul>
                     </nav>
-                    {/*<Menu/>*/}
 
                     <Switch>
                         <Route exact path={pathMain} component={() => <UserList users={users}/>}/>
                         <Route exact path={pathProjects} component={() => <ListProjects projects={projects}/>}/>
                         <Route exact path={pathTodos} component={() => <ListTodo todos={todos}/>}/>
                         <Route exact path={pathTodosProject} component={() => <ListTodo todos={todos}/>}/>
+                        <Route path={pathTodoDetails} component={() => <DetailsTodo todos={todos}/>}/>
+                        <Route path={pathUserDetails} component={() => <DetailsUser users={users}/>}/>
 
                         <Route exact path='/auth' component={() =>
                             <AuthForm get_token={(username, password) => this.get_token(username, password)}/>}/>

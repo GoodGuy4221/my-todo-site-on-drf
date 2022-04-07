@@ -13,4 +13,7 @@ class UserSerializer(HyperlinkedModelSerializer):
             'first_name',
             'last_name',
             'email',
+            'is_active',
+            'date_joined',
+            'image',
         )
