@@ -2,9 +2,12 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {useParams} from "react-router-dom";
 
+import github_icon from '../images/github.png'
+
 const ItemUser = ({user}) => {
+    const linkUserDetails = `/users/${user.id}`
     return (
-            <><span>{user.username}{user.email}<a href="/">Подробнее</a></span><br/></>
+            <><Link to={linkUserDetails}>{user.username}</Link></>
     )
 }
 
@@ -23,7 +26,7 @@ const DetailsProject = ({projects}) => {
             <tr>
             <td>{project.id}</td>
             <td>{project.name}</td>
-            <td>{project.url}</td>
+            <td><a href={project.url} target='_blank'><img src={github_icon} alt="#"/></a></td>
             <td>{project.users.map((item) => <ItemUser user={item}/>)}</td>
             </tr>
         </table>
