@@ -5,7 +5,7 @@ from userapp.serializers import UserSerializer
 
 
 class ProjectSerializer(HyperlinkedModelSerializer):
-    users = UserSerializer(many=True)
+    users = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -19,8 +19,8 @@ class ProjectSerializer(HyperlinkedModelSerializer):
 
 
 class TodoSerializer(HyperlinkedModelSerializer):
-    project = ProjectSerializer()
-    user = UserSerializer()
+    project = ProjectSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Todo
