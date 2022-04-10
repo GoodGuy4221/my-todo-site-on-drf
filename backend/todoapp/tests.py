@@ -35,6 +35,7 @@ class TestProjectViewSet(TestCase):
 
         self.factory = APIRequestFactory()
         self.client = APIClient()
+        self.project = mixer.blend(Project)
 
     def test_get_list_anonymous(self) -> None:
         request = self.factory.get(self.url)
@@ -74,6 +75,27 @@ class TestProjectViewSet(TestCase):
         project_ = Project.objects.get(id=project.id)
         self.assertEqual(project_.name, self.data_put_project.get('name'))
         self.assertEqual(project_.url, self.data_put_project.get('url'))
+        self.client.logout()
+
+    def test_delete_anonymous(self) -> None:
+        response = self.client.delete(f'{self.url}{self.project.id}/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_delete_admin(self) -> None:
+        # ТАК НЕ РАБОТАЕТ
+        # request = self.factory.delete(path=f'{self.url}{self.project.id}/')
+        # force_authenticate(request, self.admin)
+        # view = ProjectViewSet.as_view({'delete': 'destroy'})
+        # print(dir(view))
+        # response = view(request)
+        # self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.login(username=self.name, password=self.password)
+        response = self.client.delete(f'{self.url}{self.project.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        project = Project.objects.filter(pk=self.project.id)
+        self.assertEqual(project.count(), 0)
         self.client.logout()
 
     def tearDown(self) -> None:
@@ -129,6 +151,27 @@ class TestTodoViewSet(APITestCase):
         todo = Todo.objects.get(pk=self.todo.id)
         self.assertEqual(todo.text, 'put')
         self.client.logout()
+
+    def test_delete_anonymous(self) -> None:
+        todo = Todo.objects.get(pk=self.todo.id)
+        self.assertEqual(todo.is_active, True)
+
+        response = self.client.delete(f'{self.url}{self.todo.id}/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        todo = Todo.objects.get(pk=self.todo.id)
+        self.assertEqual(todo.is_active, True)
+
+    def test_delete_admin(self) -> None:
+        todo = Todo.objects.get(pk=self.todo.id)
+        self.assertEqual(todo.is_active, True)
+
+        self.client.login(username=self.name, password=self.password)
+        response = self.client.delete(f'{self.url}{self.todo.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        todo = Todo.objects.get(pk=self.todo.id)
+        self.assertEqual(todo.is_active, False)
 
     def tearDown(self) -> None:
         pass
