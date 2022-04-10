@@ -3,11 +3,13 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate, APIClient, APISimpleTestCase, APITestCase, \
     CoreAPIClient
 from mixer.backend.django import mixer
+from django.contrib.auth import get_user_model
 
-from userapp.models import User
-
+# from userapp.models import User
 from .views import ProjectViewSet
 from .models import Project, Todo
+
+User = get_user_model()
 
 
 class TestProjectViewSet(TestCase):

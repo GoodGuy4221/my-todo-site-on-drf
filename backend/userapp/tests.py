@@ -2,9 +2,12 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate, APIClient, APISimpleTestCase, APITestCase
 from mixer.backend.django import mixer
+from django.contrib.auth import get_user_model
 
-from .models import User
+# from .models import User
 from .views import UserViewSet
+
+User = get_user_model()
 
 
 class TestUserViewSet(TestCase):
