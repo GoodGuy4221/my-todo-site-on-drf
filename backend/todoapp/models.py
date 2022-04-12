@@ -29,7 +29,7 @@ class Todo(models.Model):
     )
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='проект в котором сделана заметка')
-    text = models.TextField(verbose_name='текст заметки')
+    text = models.TextField(verbose_name='текст заметки', max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата-время создания')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='дата-время обновления')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь создавший заметку')
