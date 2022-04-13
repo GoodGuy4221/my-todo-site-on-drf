@@ -23,6 +23,7 @@ from rest_framework.authtoken import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from django.views.generic import TemplateView
 
 from userapp.views import UserViewSet
 from todoapp.views import ProjectViewSet, TodoViewSet
@@ -58,6 +59,16 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger')),
     path('swagger<str:format>', schema_view.without_ui()),
     path('redoc/', schema_view.with_ui('redoc')),
+
+    path('swagger.json', schema_view.without_ui(), name='openapi-schema'),
+    path('swagger-ui/', TemplateView.as_view(
+        template_name='swagger-ui.html',
+        extra_context={'schema_url': 'openapi-schema'}
+    ), name='swagger-ui'),
+    path('redoc-redoc/', TemplateView.as_view(
+        template_name='redoc.html',
+        extra_context={'schema_url': 'openapi-schema'}
+    ), name='redoc'),
 ]
 
 if settings.DEBUG:
