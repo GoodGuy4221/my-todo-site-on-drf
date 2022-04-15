@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
+    'drf_yasg',
 
     'userapp.apps.UserappConfig',
     'todoapp.apps.TodoappConfig',
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [Path(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -173,6 +174,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    # http://127.0.0.1:8000/api/users/?version=v2
+    # http://127.0.0.1:8000/api/users/?version=with-position
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
 }
 
 CORS_ALLOWED_ORIGINS = [

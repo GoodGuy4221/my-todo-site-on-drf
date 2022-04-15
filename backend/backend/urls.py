@@ -15,16 +15,30 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
 from django.conf import settings
 from django.conf.urls.static import static
-
+from rest_framework import permissions
 from rest_framework.routers import DefaultRouter, SimpleRouter
 from rest_framework.authtoken import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from django.views.generic import TemplateView
 
 from userapp.views import UserViewSet
 from todoapp.views import ProjectViewSet, TodoViewSet
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title='my-first-drf-project',
+        default_version='v1',
+        description='my-first-drf-project',
+        contact=openapi.Contact(email='test@test.ru'),
+        license=openapi.License(name='MIT')
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,)
+)
 
 router = DefaultRouter()
 router.register('users', UserViewSet)
@@ -41,6 +55,20 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    path('swagger/', schema_view.with_ui('swagger')),
+    path('swagger<str:format>', schema_view.without_ui()),
+    path('redoc/', schema_view.with_ui('redoc')),
+
+    path('swagger.json', schema_view.without_ui(), name='openapi-schema'),
+    path('swagger-ui/', TemplateView.as_view(
+        template_name='swagger-ui.html',
+        extra_context={'schema_url': 'openapi-schema'}
+    ), name='swagger-ui'),
+    path('redoc-redoc/', TemplateView.as_view(
+        template_name='redoc.html',
+        extra_context={'schema_url': 'openapi-schema'}
+    ), name='redoc'),
 ]
 
 if settings.DEBUG:
