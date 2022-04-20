@@ -1,7 +1,7 @@
 import React from 'react'
 import {useParams} from "react-router-dom";
 
-const DetailsTodo = ({todos}) => {
+const DetailsTodo = ({todos, deleteTodo}) => {
     console.log(todos)
     let {id} = useParams()
     id = parseInt(id)
@@ -16,6 +16,7 @@ const DetailsTodo = ({todos}) => {
                 <th>Создатель</th>
                 <th>Дата создания</th>
                 <th>Дата обновления</th>
+                <th> </th>
             <tr>
                 <td>{todo.id}</td>
                 <td>{todo.isActive ? 'Активна' : 'Закрыта'}</td>
@@ -24,6 +25,7 @@ const DetailsTodo = ({todos}) => {
                 <td>{todo.user.username}</td>
                 <td>{todo.createdAt}</td>
                 <td>{todo.updatedAt}</td>
+                <td><button onClick={()=>deleteTodo(todo.id)} type="button">удалить</button></td>
             </tr>
         </table>
         </div>

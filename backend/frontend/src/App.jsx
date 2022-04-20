@@ -14,12 +14,14 @@ import DetailsProject from "./components/DetailsProject";
 import AuthForm from "./components/Auth";
 import DetailsTodo from "./components/DetailsTodo";
 import DetailsUser from "./components/DetailsUser";
+import TodoForm from "./components/TodoForm";
 
 import users_ from "./images/users.png";
 import project from "./images/project.png";
 import todo from "./images/todo.png";
 import logout_ from "./images/logout.png";
 import auth_icon from "./images/login.png"
+import ProjectForm from "./components/ProjectForm";
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
 const getUrl = (url) => `${DOMAIN}${url}`
@@ -37,7 +39,48 @@ class App extends React.Component {
         }
     }
 
-    load_data(){
+    createProject(props) {
+        console.log(props, 'call createProject')
+        const headers = this.get_headers()
+        axios.post(`http://127.0.0.1:8000/api/projects/`, {...props}, {headers})
+            .then(response => {
+                this.load_data()
+            })
+            .catch(error => console.log(error))
+    }
+
+    createTodo(props) {
+        console.log(props, 'call createTodo')
+        const headers = this.getHeaders();
+        props.isActive = true;
+        props.author = this.state.users.find((user) => user.username === this.state.username).id;
+        axios.post(`http://127.0.0.1:8000/api/todos/`, {...props}, {headers})
+            .then(response => {
+                this.load_data()
+            })
+            .catch(error => console.log(error))
+    }
+
+    deleteTodo(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/todos/${id}`, {headers})
+            .then(response => {
+                this.load_data()
+                })
+            .catch(error => console.error(error))
+    }
+
+    deleteProject(id) {
+        console.log(id)
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/projects/${id}`, {headers})
+            .then(response => {
+                this.load_data()
+                })
+            .catch(error => console.error(error))
+    }
+
+    load_data() {
         const headers = this.get_headers()
 
         axios.get(getUrl('users/'), {headers})
@@ -62,13 +105,13 @@ class App extends React.Component {
             }).catch(error => console.error(error))
     }
 
-    set_name(username){
+    set_name(username) {
         const cookies = new Cookies()
         cookies.set('username', username)
         this.setState({username})
     }
 
-    set_token(token){
+    set_token(token) {
         // localStorage.setItem('token', token)
         // let item = localStorage.getItem('token')
         const cookies = new Cookies()
@@ -76,7 +119,7 @@ class App extends React.Component {
         this.setState({'token': token}, () => this.load_data())
     }
 
-    get_token(username, password){
+    get_token(username, password) {
         // console.log('get_token call', username, password)
 
         axios.post('http://127.0.0.1:8000/api-token-auth/',
@@ -88,42 +131,42 @@ class App extends React.Component {
             }).catch(error => alert('Не верный логин или пароль!'))
     }
 
-    is_auth(){
+    is_auth() {
         return !!this.state.token
     }
 
-    get_headers(){
+    get_headers() {
         let headers = {
             'Content-Type': 'applications/json',
         }
-        if (this.is_auth()){
+        if (this.is_auth()) {
             headers['Authorization'] = `Token ${this.state.token}`
         }
         return headers
     }
 
-    logout(){
+    logout() {
         this.set_token('')
         this.set_name('')
     }
 
-    get_token_from_cookies(){
+    get_token_from_cookies() {
         const cookies = new Cookies()
         const token = cookies.get('token')
         this.setState({'token': token}, () => this.load_data())
     }
 
-    get_username_from_cookies_and_set_state(){
+    get_username_from_cookies_and_set_state() {
         const cookies = new Cookies()
         const username = cookies.get('username')
-        if (username){
+        if (username) {
             this.setState({'username': username})
             return username
         }
         return null
     }
 
-    get_username(){
+    get_username() {
         return this.state.username || this.get_username_from_cookies_and_set_state() || 'Anonymous'
     }
 
@@ -145,44 +188,57 @@ class App extends React.Component {
 
         return (
             <>
-            <div className='container'>
-                <BrowserRouter>
-                    <nav>
-                        <ul style={{'display': 'flex', 'justify-content': 'center'}}>
-                            <li><Link to='/'><img src={users_} alt=""/>Пользователи</Link></li>
-                            <li><Link to='/projects'><img src={project} alt=""/>Проекты</Link></li>
-                            <li><Link to='/todos'><img src={todo} alt=""/>ToDo</Link></li>
+                <div className='container'>
+                    <BrowserRouter>
+                        <nav>
+                            <ul style={{'display': 'flex', 'justify-content': 'center'}}>
+                                <li><Link to='/'><img src={users_} alt="#"/>Пользователи</Link></li>
+                                <li><Link to='/projects'><img src={project} alt="#"/>Проекты</Link></li>
+                                <li><Link to='/todos'><img src={todo} alt="#"/>ToDo</Link></li>
 
-                            <li>
-                                {this.is_auth() ? <Link onClick={() => this.logout()}><img src={logout_} alt="logout"/>Logout</Link> :
-                                    <Link to='/auth'><img src={auth_icon} alt=""/>Auth</Link>}
-                            </li>
-                            <li>{this.get_username()}</li>
-                        </ul>
-                    </nav>
+                                <li>
+                                    {this.is_auth() ? <Link onClick={() => this.logout()}><img src={logout_}
+                                                                                               alt="logout"/>Logout</Link> :
+                                        <Link to='/auth'><img src={auth_icon} alt=""/>Auth</Link>}
+                                </li>
+                                <li>{this.get_username()}</li>
+                            </ul>
+                        </nav>
 
-                    <Switch>
-                        <Route exact path={pathMain} component={() => <UserList users={users}/>}/>
-                        <Route exact path={pathProjects} component={() => <ListProjects projects={projects}/>}/>
-                        <Route exact path={pathTodos} component={() => <ListTodo todos={todos}/>}/>
-                        <Route exact path={pathTodosProject} component={() => <ListTodo todos={todos}/>}/>
-                        <Route path={pathTodoDetails} component={() => <DetailsTodo todos={todos}/>}/>
-                        <Route path={pathUserDetails} component={() => <DetailsUser users={users}/>}/>
+                        <Switch>
+                            <Route exact path={pathMain} component={() => <UserList users={users}/>}/>
 
-                        <Route exact path='/auth' component={() =>
-                            <AuthForm get_token={(username, password) => this.get_token(username, password)}/>}/>
+                            <Route exact path={pathProjects} component={() => <ListProjects projects={projects}
+                                                            deleteProject={(id) => this.deleteProject(id)}/>}/>
 
-                        <Route path='/project/:id' component={
-                            () => <DetailsProject projects={projects}/>
-                        }/>
+                            <Route exact path={pathTodos} component={() => <ListTodo todos={todos}
+                                                                    deleteTodo={(id) => this.deleteTodo(id)}/>}/>
 
-                        <Redirect from='/project' to={pathProjects}/>
-                        <Route component={NotFound404}/>
-                    </Switch>
+                            <Route exact path={pathTodosProject} component={() => <ListTodo todos={todos}/>}/>
 
-                    <Footer/>
-                </BrowserRouter>
-            </div>
+                            <Route path={pathTodoDetails} component={() => <DetailsTodo todos={todos}
+                                                                    deleteTodo={(id) => this.deleteTodo(id)}/>}/>
+
+                            <Route path={pathUserDetails} component={() => <DetailsUser users={users}/>}/>
+
+                            <Route exact path='/auth' component={() =>
+                                <AuthForm get_token={(username, password) => this.get_token(username, password)}/>}/>
+
+                            <Route path='/project/:id' component={
+                                () => <DetailsProject projects={projects} deleteProject={(id) => this.deleteProject(id)}/>
+                            }/>
+
+                            <Route exact path='/projects/create' component={() => <ProjectForm createProject={(props) => this.createProject(props)} return users={this.state.users}/>}/>
+
+                            <Route exact path='/todos/create' component={() => {<TodoForm projects={this.state.projects} createTodo={(props) => this.createTodo(props)}/>}}/>
+
+                            <Redirect from='/project' to={pathProjects}/>
+                            <Route component={NotFound404}/>
+                        </Switch>
+
+                        <Footer/>
+                    </BrowserRouter>
+                </div>
             </>
         );
     }

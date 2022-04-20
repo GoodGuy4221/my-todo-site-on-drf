@@ -5,11 +5,11 @@ import NoAuth from "./NoAuth";
 
 import details_icons from '../images/details.png'
 
-const ItemTodo = ({todo}) => {
+const ItemTodo = ({todo, deleteTodo}) => {
     const linkTodoDetails = `/todos/${todo.id}`
     const linkUserCreate = `/users/${todo.user.id}`
     const linkProjectDetails = `/project/${todo.project.id}`
-    return(
+    return (
         <tr>
             <td>{todo.id}</td>
             <td>{todo.isActive ? 'Активна' : 'Закрыта'}</td>
@@ -19,20 +19,21 @@ const ItemTodo = ({todo}) => {
             <td>{todo.createdAt}</td>
             <td>{todo.updatedAt}</td>
             <td><Link to={linkTodoDetails}><img src={details_icons} alt="#"/></Link></td>
+            <td><button onClick={()=>deleteTodo(todo.id)} type="button">удалить</button></td>
         </tr>
     )
 }
 
-const ListTodo = ({todos}) => {
-    if (todos.length === 0){
+const ListTodo = ({todos, deleteTodo}) => {
+    if (todos.length === 0) {
         return (
             <NoAuth/>
         )
     }
 
-    return(
+    return (
         <div className="container">
-        <table className="table">
+            <table className="table">
                 <th>Номер</th>
                 <th>Статус</th>
                 <th>Текст (Начало)</th>
@@ -41,8 +42,11 @@ const ListTodo = ({todos}) => {
                 <th>Дата создания</th>
                 <th>Дата обновления</th>
                 <th>Подробнее</th>
-                {todos.map((todo) => <ItemTodo todo={todo}/>)}
-        </table>
+                <th> </th>
+                {todos.map((todo) => <ItemTodo todo={todo} deleteTodo={deleteTodo}/>)}
+
+                <Link to='/todos/create'>Создать</Link>
+            </table>
         </div>
     )
 }
