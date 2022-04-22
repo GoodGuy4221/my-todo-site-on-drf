@@ -40,9 +40,11 @@ class App extends React.Component {
     }
 
     createProject(props) {
-        console.log(props, 'call createProject')
+        // console.log(props, 'call createProject')
         const headers = this.get_headers()
-        axios.post(`http://127.0.0.1:8000/api/projects/`, {...props}, {headers})
+        const data = {name: props.name, url: props.url, users: props.users}
+        console.log(data)
+        axios.post(`http://127.0.0.1:8000/api/projects/`, data, {headers})
             .then(response => {
                 this.load_data()
             })
@@ -50,11 +52,13 @@ class App extends React.Component {
     }
 
     createTodo(props) {
-        console.log(props, 'call createTodo')
-        const headers = this.getHeaders();
-        props.isActive = true;
-        props.author = this.state.users.find((user) => user.username === this.state.username).id;
-        axios.post(`http://127.0.0.1:8000/api/todos/`, {...props}, {headers})
+        // console.log(props, 'call createTodo', this.state.users.find(item => item.username === this.state.username).id)
+        const headers = this.get_headers()
+        const is_active = true
+        const user_id = this.state.users.find(item => item.username === this.state.username).id
+        const data = {project: props.project, text: props.text, user: user_id, is_active: is_active}
+        console.log(data)
+        axios.post(`http://127.0.0.1:8000/api/todos/`, data, {headers})
             .then(response => {
                 this.load_data()
             })
@@ -137,7 +141,7 @@ class App extends React.Component {
 
     get_headers() {
         let headers = {
-            'Content-Type': 'applications/json',
+            'Content-Type': 'application/json',
         }
         if (this.is_auth()) {
             headers['Authorization'] = `Token ${this.state.token}`
@@ -206,6 +210,9 @@ class App extends React.Component {
                         </nav>
 
                         <Switch>
+                            <Route exact path='/todos/create' component={() => <TodoForm projects={this.state.projects}
+                            createTodo={(project, text) => this.createTodo(project, text)}/>}/>
+
                             <Route exact path={pathMain} component={() => <UserList users={users}/>}/>
 
                             <Route exact path={pathProjects} component={() => <ListProjects projects={projects}
@@ -228,9 +235,8 @@ class App extends React.Component {
                                 () => <DetailsProject projects={projects} deleteProject={(id) => this.deleteProject(id)}/>
                             }/>
 
-                            <Route exact path='/projects/create' component={() => <ProjectForm createProject={(props) => this.createProject(props)} return users={this.state.users}/>}/>
-
-                            <Route exact path='/todos/create' component={() => {<TodoForm projects={this.state.projects} createTodo={(props) => this.createTodo(props)}/>}}/>
+                            <Route exact path='/projects/create' component={() => <ProjectForm users={this.state.users}
+                            createProject={(name, url, users) => this.createProject(name, url, users)}/>}/>
 
                             <Redirect from='/project' to={pathProjects}/>
                             <Route component={NotFound404}/>

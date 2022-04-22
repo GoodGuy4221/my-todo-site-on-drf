@@ -32,6 +32,8 @@ const DetailsProject = ({projects, deleteProject}) => {
             <td>{project.users.map((item) => <ItemUser user={item}/>)}</td>
             </tr>
         </table>
+        <Link to='/projects/create'>Создать</Link>
+
         </div>
     )
 }

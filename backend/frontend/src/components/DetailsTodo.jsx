@@ -1,5 +1,5 @@
 import React from 'react'
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 const DetailsTodo = ({todos, deleteTodo}) => {
     console.log(todos)
@@ -28,6 +28,7 @@ const DetailsTodo = ({todos, deleteTodo}) => {
                 <td><button onClick={()=>deleteTodo(todo.id)} type="button">удалить</button></td>
             </tr>
         </table>
+            <Link to='/todos/create'>Создать</Link>
         </div>
     )
 }

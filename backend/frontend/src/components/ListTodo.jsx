@@ -44,9 +44,8 @@ const ListTodo = ({todos, deleteTodo}) => {
                 <th>Подробнее</th>
                 <th> </th>
                 {todos.map((todo) => <ItemTodo todo={todo} deleteTodo={deleteTodo}/>)}
-
-                <Link to='/todos/create'>Создать</Link>
             </table>
+            <Link to='/todos/create'>Создать</Link>
         </div>
     )
 }
