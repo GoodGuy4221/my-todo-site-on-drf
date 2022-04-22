@@ -7,7 +7,7 @@ import checklist from '../images/checklist.png'
 
 import NoAuth from "./NoAuth";
 
-const ItemProject = ({item}) => {
+const ItemProject = ({item, deleteProject}) => {
     let itemDetailsLink = `/project/${item.id}`
     let todosProject = `/todos/project/${item.id}`
     return (
@@ -17,29 +17,33 @@ const ItemProject = ({item}) => {
             <td><a href={item.url} target="_blank"><img src={github} alt="github"/></a></td>
             <td><Link to={todosProject}><img src={checklist} alt="#"/></Link></td>
             <td><Link to={itemDetailsLink}><img src={details} alt="#"/></Link></td>
+            <td><button onClick={() => deleteProject(item.id)} type="button">удалить</button></td>
         </tr>
     )
 }
 
-const ListProjects = ({projects}) => {
-    if (projects.length === 0){
+const ListProjects = ({projects, deleteProject}) => {
+    if (projects.length === 0) {
         return (
             <NoAuth/>
         )
     }
 
-    return(
+    return (
         <div className="container">
-        <table className="table">
-            <th>Номер</th>
-            <th>Название</th>
-            <th>Ссылка на репозиторий</th>
-            <th>ToDos</th>
-            <th>Детальная информация о проекте</th>
-            {projects.map((item) => <ItemProject item={item}/>)}
-        </table>
+            <table className="table">
+                <th>Номер</th>
+                <th>Название</th>
+                <th>Ссылка на репозиторий</th>
+                <th>ToDos</th>
+                <th>Детальная информация о проекте</th>
+                <th> </th>
+                {projects.map((item) => <ItemProject item={item} deleteProject={deleteProject}/>)}
+
+                <Link to='/projects/create'>Создать</Link>
+            </table>
         </div>
-        )
+    )
 }
 
 export default ListProjects
