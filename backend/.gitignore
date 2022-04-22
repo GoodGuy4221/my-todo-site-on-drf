@@ -130,6 +130,6 @@ dmypy.json
 
 # my add
 db.sqlite3
-.idea
+../.idea
 __pycache__
 venv-drf-project/
