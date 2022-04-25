@@ -27,9 +27,15 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
+    'http://0.0.0.0:80',
+    'http://localhost:80',
+    'http://0.0.0.0:8080',
+    'http://localhost:8080',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/blacklist_app.html
@@ -59,7 +65,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -70,7 +76,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [Path(BASE_DIR, 'templates')],
+        'DIRS': [Path(BASE_DIR, 'templates'), Path(BASE_DIR, 'frontend', 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,9 +97,20 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': Path(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'db',
+#         'PASSWORD': '1',
+#         'USER': 'eric',
+#         'HOST': 'db',
+#         'PORT': '5432',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -130,6 +147,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATICFILES_DIRS = (
+#     Path(BASE_DIR.parent, 'frontend', 'build', 'static'),
+#     Path(BASE_DIR, 'static'),
+# )
+STATIC_ROOT = Path(BASE_DIR, 'static')
 
 # Media Settings
 MEDIA_URL = '/media/'
