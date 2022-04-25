@@ -5,7 +5,7 @@ class TodoForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'project': 0,
+            'project': 1,
             'text': '',
         }
     }
@@ -32,7 +32,7 @@ class TodoForm extends React.Component {
             <h1 className='text-center'>Создать новое ToDo</h1>
             <form onSubmit={(event => this.handleSubmit(event))}>
                 <select name="project" onChange={(event) => this.handleProjectChange(event)}>
-                      {this.props.projects.map((item) => <option value={item.id}>{item.name}</option>)}
+                      {this.props.projects.map((item) => <option value={`${item.id}`}>{item.name}</option>)}
                 </select>
 
                 <div className="form-group">
