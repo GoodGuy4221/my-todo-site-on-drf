@@ -27,9 +27,15 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
+    'http://0.0.0.0:80',
+    'http://localhost:80',
+    'http://0.0.0.0:8080',
+    'http://localhost:8080',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/blacklist_app.html
@@ -59,7 +65,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -88,10 +94,21 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': Path(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': Path(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db',
+        'PASSWORD': '1',
+        'USER': 'eric',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
@@ -130,9 +147,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    Path(BASE_DIR, 'frontend', 'build', 'static'),
-)
+# STATICFILES_DIRS = (
+#     Path(BASE_DIR.parent, 'frontend', 'build', 'static'),
+#     Path(BASE_DIR, 'static'),
+# )
+STATIC_ROOT = Path(BASE_DIR, 'static')
 
 # Media Settings
 MEDIA_URL = '/media/'

@@ -9,6 +9,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         for _ in range(5):
-            mixer.blend(Project)
+            # mixer.blend(Project)
             mixer.blend(Todo)
         print('done!')

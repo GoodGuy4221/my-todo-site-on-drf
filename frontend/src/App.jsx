@@ -44,7 +44,7 @@ class App extends React.Component {
         const headers = this.get_headers()
         const data = {name: props.name, url: props.url, users: props.users}
         console.log(data)
-        axios.post(`http://127.0.0.1:8000/api/projects/`, data, {headers})
+        axios.post('http://127.0.0.1:8000/api/projects/', data, {headers})
             .then(response => {
                 this.load_data()
             })
@@ -58,7 +58,7 @@ class App extends React.Component {
         const user_id = this.state.users.find(item => item.username === this.state.username).id
         const data = {project: props.project, text: props.text, user: user_id, is_active: is_active}
         console.log(data)
-        axios.post(`http://127.0.0.1:8000/api/todos/`, data, {headers})
+        axios.post('http://127.0.0.1:8000/api/todos/', data, {headers})
             .then(response => {
                 this.load_data()
             })
